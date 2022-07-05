@@ -1,6 +1,9 @@
 import React from 'react';
-import {getMergeSortAnimations,getbubbleSortAnimation,quickSortAnimation} from '../SortingAlgorithms/SortingAlgorithms.js';
+import {getMergeSortAnimations,getbubbleSortAnimation,quickSortAnimation,heapSortAnimation} from '../SortingAlgorithms/SortingAlgorithms.js';
 import './SortingVisualizer.css';
+import { Button,Form, Input,Label } from 'reactstrap';//  I use reactrap
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 // Change this value for the speed of the animations.
 const ANIMATION_SPEED_MS = 1;
@@ -90,6 +93,30 @@ export default class SortingVisualizer extends React.Component {
 
   heapSort() {
     // We leave it as an exercise to the viewer of this code to implement this method.
+    const animations = heapSortAnimation(this.state.array);
+    for (let i = 0; i < animations.length; i++) {
+        const arrayBars = document.getElementsByClassName('array-bar');
+        // console.log(arrayBars);
+        const isColorChange = i % 3 !== 2;
+        if (isColorChange) {
+          const [barOneIdx, barTwoIdx] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          const barTwoStyle = arrayBars[barTwoIdx].style;
+          const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+          setTimeout(() => {
+            barOneStyle.backgroundColor = color;
+            barTwoStyle.backgroundColor = color;
+          }, i * ANIMATION_SPEED_MS);
+        } else {
+          setTimeout(() => {
+            const [idx1,newHeight1,idx2, newHeight2] = animations[i];
+            const barOneStyle = arrayBars[idx1].style;
+            barOneStyle.height = `${newHeight1}px`;
+            const barTwoStyle = arrayBars[idx2].style;
+            barTwoStyle.height = `${newHeight2}px`;
+          }, i * ANIMATION_SPEED_MS);
+        }
+      }
   }
 
   bubbleSort() {
@@ -143,6 +170,30 @@ export default class SortingVisualizer extends React.Component {
       <button onClick={() => this.quickSort()}>Quick Sort</button>
       <button onClick={() => this.heapSort()}>Heap Sort</button>
       <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
+      <div  
+        sm="4"
+        xs="6">
+        <Label for="exampleRange">Range</Label>
+        <Input
+          id="speed"
+          name="range"
+          type="range"
+        
+        />
+        
+      </div>
+      <div  
+        sm="4"
+        xs="6">
+        <Label for="exampleRange">Speed</Label>
+        <Input
+          id="speed"
+          name="range"
+          type="range"
+        
+        />
+        
+      </div>
       </>
     );
   }

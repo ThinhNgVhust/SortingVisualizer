@@ -150,4 +150,62 @@ function swap(arr, i, pivot) {
 
 
 
+export function heapSortAnimation(array){
+    let animations = []
+    let auxiliaryArray = array.slice();
+    heapsortHelper(auxiliaryArray,animations); 
+
+    return animations;
+}
+
+
+function heapsortHelper(mainArray,animations){
+    build_max_heap(mainArray,animations);
+    let length = mainArray.length;
+    while(length > 0){
+        animations.push([0,length-1]);
+        animations.push([0,length-1]);
+        animations.push([0,mainArray[length-1],length-1,mainArray[0]]);
+        swap(mainArray,0,length-1);
+        length--;
+        max_heapify(mainArray,animations,0,length);
+    }
+    
+
+}
+
+
+function max_heapify(mainArray,animations,index,length)
+{
+    // O(logn)
+    let ele = mainArray[index];
+    let left = 2*index+1;
+    let right = 2*index+2;
+    let largest = index;
+    if (left < length && mainArray[left]>ele)
+    {
+        largest = left;
+    }
+    if(right < length && mainArray[right]>mainArray[largest])
+    {
+        largest = right;
+    }
+    if (largest !== index){
+        //
+        animations.push([index,largest]);
+        animations.push([index,largest]);
+        animations.push([index,mainArray[largest],largest,mainArray[index]]);
+        swap(mainArray,index,largest);
+        max_heapify(mainArray,animations,largest,length);
+
+    }
+}
+
+function build_max_heap(mainArray,animations){
+    let length = mainArray.length;
+    for (let index = length/2; index >= 0; index--) {
+        max_heapify(mainArray,animations,index,length);    
+    }
+    
+}
 
